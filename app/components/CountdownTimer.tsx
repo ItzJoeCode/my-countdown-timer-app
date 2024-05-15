@@ -2,37 +2,46 @@ import React, { useState, useEffect } from 'react';
 import styles from './CountdownTimer.module.css';
 
 const CountdownTimer: React.FC = () => {
+  const [inputValue, setInputValue] = useState<string>('');
   const [time, setTime] = useState<number>(0);
   const [timerRunning, setTimerRunning] = useState<boolean>(false);
-  const [pauseText, setPauseText] = useState<string>('Start');
+  const [buttonText, setButtonText] = useState<string>('Start');
 
   useEffect(() => {
     let countdown: NodeJS.Timeout;
 
-    if (timerRunning) {
+    if (timerRunning && time > 0) {
       countdown = setInterval(() => {
         setTime(prevTime => {
           if (prevTime <= 0) {
             clearInterval(countdown);
             setTimerRunning(false);
+            setButtonText('Start');
             return 0;
           } else {
             return prevTime - 1;
           }
         });
       }, 1000);
+    } else if (time === 0) {
+      setTimerRunning(false);
+      setButtonText('Start');
     }
 
     return () => clearInterval(countdown);
-  }, [timerRunning]);
+  }, [timerRunning, time]);
 
-  const startOrPauseTimer = () => {
-    if (timerRunning) {
-      setTimerRunning(false);
-      setPauseText('Continue');
-    } else {
+  const handleStartPauseClick = () => {
+    if (buttonText === 'Start' || buttonText === 'Continue') {
+      if (buttonText === 'Start') {
+        setTime(parseInt(inputValue));
+        setInputValue('');
+      }
+      setButtonText('Pause');
       setTimerRunning(true);
-      setPauseText('Pause');
+    } else if (buttonText === 'Pause') {
+      setButtonText('Continue');
+      setTimerRunning(false);
     }
   };
 
@@ -46,25 +55,20 @@ const CountdownTimer: React.FC = () => {
     return num < 10 ? `0${num}` : num.toString();
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value);
-    setTime(value);
-  };
-
   return (
     <div>
       <h1 className={styles.heading}>Countdown Timer</h1>
       <div className={styles.container}>
         <div className={styles['input-container']}>
           <input
-            type="number"
+            type="number" id='seconds'
             placeholder="Enter time in seconds"
-            value={time}
-            onChange={handleInputChange}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
           />
         </div>
         <div className={styles['buttons-container']}>
-          <button onClick={startOrPauseTimer}>{pauseText}</button>
+          <button className={`${styles.button} ${timerRunning ? styles.pause : ''}`} onClick={handleStartPauseClick}>{buttonText}</button>
         </div>
         <div className={styles.timer}>{formatTime(time)}</div>
       </div>

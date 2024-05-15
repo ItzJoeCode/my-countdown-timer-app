@@ -1,6 +1,6 @@
 .heading {
     font-size: 40px;
-    color: #333;
+    color: #8D0000;
     text-align: center;
     margin-bottom: 20px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
@@ -20,18 +20,51 @@
   .input-container input {
     padding: 8px;
     font-size: 16px;
+    color: black;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    outline: none;
+  }
+
+  .input-container input:focus {
+    border-color: #005A9C;
+    box-shadow: 0 0 3px #007BFF;
   }
   
-  .buttons-container button {
+  .buttons-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+
+  .button {
     margin: 0 5px;
     padding: 8px 16px;
     font-size: 16px;
     cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+  }  
+
+  .button:focus, .button:hover{
+    background-color: #45A049;
+    box-shadow: 0 0 8px rgba(69, 100, 73, 0.5);
+  }
+
+  .button.pause {
+    background-color: #f44336;
+  }
+
+  .button.pause:focus, .button.pause:hover {
+    background-color: #DA4230;
   }
   
   .timer {
     font-size: 24px;
     font-weight: bold;
-    margin-top: 10px;
+    margin: 10px;
   }
-  
